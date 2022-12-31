@@ -1,5 +1,4 @@
-
-**HttpSerialization**
+### HttpSerialization
 ```py
 # model user
 from django.contrib.auth.models import AbstractUser
@@ -35,19 +34,13 @@ def get_user_func_view(request):
     return request.user
 ```
 
-API call
-```
-GET /api/auth HTTP/1.1
-Authorization: Bearer ...
-```
-
 API response
 ```json
 {
   "data": {
     "id": 1,
-    "email": "tom_hiddleston@gmail.com",
-    "username": "tom_hiddleston"
+    "email": "userA@example.com",
+    "username": "userA"
   }
 }
 ```
@@ -69,11 +62,6 @@ class UserViewSet(GenericViewSet):
     def list(self, request, pk):
         return self.get_queryset()
 
-```
-
-API call
-```
-GET /api/users HTTP/1.1
 ```
 
 API response
@@ -111,7 +99,7 @@ class UserAPIView(APIView):
         return request.user
 ```
 
-**SchemaValidation**
+### SchemaValidation
 
 * When validating body data(`POST` method)
 ```py
@@ -139,20 +127,25 @@ Accept: */*
 
 
 {
-  "email": "chris.evans@gmail.com",
+  "email": "chris.evans",
   "username": "chris_evans"
 }
+
 ```
 
-API response
+API response (422 HTTP status's code)
 
 ```json
 {
-  "data": {
-    "id": 3,
-    "email": "chris.evans@gmail.com",
-    "username": "chris_evans"
-  }
+  "errors": [
+    {
+      "field": "email",
+      "detail": [
+        "Enter a valid email address."
+      ]
+    }
+  ],
+  "message": "Validation Error!"
 }
 
 ```
@@ -180,23 +173,22 @@ class UserViewSet(GenericViewSet):
 
 API call
 ```
-GET /api/users?username=chris_evans HTTP/1.1
+GET /api/users?email=chris_evans HTTP/1.1
 ```
 
-API response
+API response(422 HTTP status's code)
 
 ```json
 {
-  "count": 1, 
-  "next": null, 
-  "previous": null,
-  "data": [
+  "errors": [
     {
-      "id": 3,
-      "email": "chris.evans@gmail.com",
-      "username": "chris_evans"
+      "field": "email",
+      "detail": [
+        "Enter a valid email address."
+      ]
     }
-  ]
+  ],
+  "message": "Validation Error!"
 }
 ```
 

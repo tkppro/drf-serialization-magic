@@ -162,21 +162,25 @@ Accept: */*
 
 
 {
-  "email": "chris.evans@gmail.com",
+  "email": "chris.evans",
   "username": "chris_evans"
 }
 
 ```
 
-API response
+API response (422 HTTP status's code)
 
 ```json
 {
-  "data": {
-    "id": 3,
-    "email": "chris.evans@gmail.com",
-    "username": "chris_evans"
-  }
+  "errors": [
+    {
+      "field": "email",
+      "detail": [
+        "Enter a valid email address."
+      ]
+    }
+  ],
+  "message": "Validation Error!"
 }
 
 ```
@@ -204,23 +208,22 @@ class UserViewSet(GenericViewSet):
 
 API call
 ```
-GET /api/users?username=chris_evans HTTP/1.1
+GET /api/users?email=chris_evans HTTP/1.1
 ```
 
-API response
+API response(422 HTTP status's code)
 
 ```json
 {
-  "count": 1, 
-  "next": null, 
-  "previous": null,
-  "data": [
+  "errors": [
     {
-      "id": 3,
-      "email": "chris.evans@gmail.com",
-      "username": "chris_evans"
+      "field": "email",
+      "detail": [
+        "Enter a valid email address."
+      ]
     }
-  ]
+  ],
+  "message": "Validation Error!"
 }
 ```
 
