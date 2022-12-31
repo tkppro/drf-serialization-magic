@@ -1,37 +1,3 @@
-DRF HTTP Serialization
-=============
-
-**A collection of useful Decorators to DRY up your Django Rest Framework when using Serializers**
-
-Full documentation: 
-
-## Overview
-Serializer Decorators help you to boost-up your code and decrease the duplication it has.
-By using a high-order functional to reduce the number of codes, and build up a consistency
-in your project
-
-## Requirements
-* Python (>= 3.7)
-* [Django](https://github.com/django/django) (>= 3.0)
-* [Django REST Framework](https://github.com/tomchristie/django-rest-framework) (> 3.11)
-
-## Installation
-Using `pip`:
-
-```bash
-$ pip install drf-http-serialization
-```
-
-And add `drf_http_serialization` to your `INSTALLED_APPS` setting:
-
-```py
-INSTALLED_APPS = (
-    "..."
-    "drf_http_serialization"
-)
-```
-
-## Basic Usage
 
 **HttpSerialization**
 ```py
@@ -69,13 +35,19 @@ def get_user_func_view(request):
     return request.user
 ```
 
+API call
+```
+GET /api/auth HTTP/1.1
+Authorization: Bearer ...
+```
+
 API response
 ```json
 {
   "data": {
     "id": 1,
-    "email": "userA@example.com",
-    "username": "userA"
+    "email": "tom_hiddleston@gmail.com",
+    "username": "tom_hiddleston"
   }
 }
 ```
@@ -97,6 +69,11 @@ class UserViewSet(GenericViewSet):
     def list(self, request, pk):
         return self.get_queryset()
 
+```
+
+API call
+```
+GET /api/users HTTP/1.1
 ```
 
 API response
@@ -165,7 +142,6 @@ Accept: */*
   "email": "chris.evans@gmail.com",
   "username": "chris_evans"
 }
-
 ```
 
 API response
@@ -272,12 +248,3 @@ API response
   ]
 }
 ```
-
-Support
--------
-
-If you need help, don't hesitate to start an [issue][issue]. 
-For commercial support, please contact via email:
-[Thang Dang Minh](mailto:thangdangdev@gmail.com?subject=[GitHub]%20Source%20Django%20HTTP%20Serialization)
-
-[issue]: https://github.com/tkppro/drf-http-serialization/issues
