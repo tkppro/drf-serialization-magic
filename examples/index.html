@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Examples - drf-http-serialization</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../css/index.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Examples";
+        var mkdocs_page_input_path = "examples.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> drf-http-serialization
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage-views/">Views</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage-api/">API Reference</a>
+                  </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Examples</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">drf-http-serialization</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Examples</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/tkppro/drf-http-serialization/edit/master/docs/examples.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h3 id="httpserialization">HttpSerialization</h3>
+<pre><code class="language-py"># model user
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    pass
+</code></pre>
+<pre><code class="language-py"># serializers.py
+from rest_framework import serializers
+from drf_http_serialization.models import User
+
+class UserInformationSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    username = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = [&quot;id&quot;, &quot;email&quot;, &quot;username&quot;]
+</code></pre>
+<ul>
+<li>With <code>@api_view</code> decorator function</li>
+</ul>
+<pre><code class="language-py">from rest_framework.decorators import api_view
+from drf_http_serialization import HttpSerialization
+from drf_http_serialization.serializers import UserInformationSerializer
+
+@api_view(http_method_names=[&quot;GET&quot;])
+@HttpSerialization(serializer_cls=UserInformationSerializer)
+def get_user_func_view(request):
+    return request.user
+</code></pre>
+<p>API response</p>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;id&quot;: 1,
+    &quot;email&quot;: &quot;userA@example.com&quot;,
+    &quot;username&quot;: &quot;userA&quot;
+  }
+}
+</code></pre>
+<ul>
+<li>With <code>GenericViewSet</code> class</li>
+</ul>
+<pre><code class="language-py">from drf_http_serialization import HttpSerialization
+from rest_framework.viewsets import GenericViewSet
+from drf_http_serialization.models import User
+from drf_http_serialization.serializers import UserInformationSerializer
+# ...
+
+
+class UserViewSet(GenericViewSet):
+    def get_queryset(self):
+        return User.objects.all()
+
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    def list(self, request, pk):
+        return self.get_queryset()
+
+</code></pre>
+<p>API response</p>
+<pre><code class="language-json">{
+  &quot;count&quot;: 2, 
+  &quot;next&quot;: null, 
+  &quot;previous&quot;: null,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;email&quot;: &quot;tom_hiddleston@gmail.com&quot;,
+      &quot;username&quot;: &quot;tom_hiddleston&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;email&quot;: &quot;chris_hemsworth@gmail.com&quot;,
+      &quot;username&quot;: &quot;chris_hemsworth&quot;
+    }
+  ]
+}
+</code></pre>
+<ul>
+<li>With <code>APIView</code> class</li>
+</ul>
+<pre><code class="language-py">from rest_framework.views import APIView
+from drf_http_serialization import HttpSerialization
+from drf_http_serialization.serializers import UserInformationSerializer
+
+
+class UserAPIView(APIView):
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    def get(self, request):
+        return request.user
+</code></pre>
+<h3 id="schemavalidation">SchemaValidation</h3>
+<ul>
+<li>When validating body data(<code>POST</code> method)</li>
+</ul>
+<pre><code class="language-py">from drf_http_serialization import HttpSerialization, SchemaValidation
+from drf_http_serialization.serializers import UserInformationSerializer
+from drf_http_serialization.models import User
+
+# combination usage
+@HttpSerialization(serializer_cls=UserInformationSerializer)
+@SchemaValidation(serializer_cls=UserInformationSerializer, location=&quot;body&quot;)
+def create(self, request, data):
+    # data object is validated
+    # the default will use key `data`, if you want to use another key,
+    # add argument to_key=&quot;something&quot; in SchemaValidation
+    user = User.objects.create(**data)
+    return user
+</code></pre>
+<p>API call</p>
+<pre><code class="language-bash">POST /api/users HTTP/1.1
+Host: 127.0.0.1
+Content-Type: application/json
+Accept: */*
+
+
+{
+  &quot;email&quot;: &quot;chris.evans&quot;,
+  &quot;username&quot;: &quot;chris_evans&quot;
+}
+
+</code></pre>
+<p>API response (422 HTTP status's code)</p>
+<pre><code class="language-json">{
+  &quot;errors&quot;: [
+    {
+      &quot;field&quot;: &quot;email&quot;,
+      &quot;detail&quot;: [
+        &quot;Enter a valid email address.&quot;
+      ]
+    }
+  ],
+  &quot;message&quot;: &quot;Validation Error!&quot;
+}
+
+</code></pre>
+<ul>
+<li>When validating query params</li>
+</ul>
+<pre><code class="language-py">from drf_http_serialization import HttpSerialization, SchemaValidation
+from drf_http_serialization.serializers import UserInformationSerializer
+from drf_http_serialization.models import User
+from rest_framework.viewsets import GenericViewSet
+
+class UserViewSet(GenericViewSet):
+
+    # combination usage
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    @SchemaValidation(serializer_cls=UserInformationSerializer, location=&quot;query&quot;)
+    def list(self, request, query):
+        # data dict is validated
+        # the default will use key `data`, if you want to use another key,
+        # add argument to_key=&quot;something&quot; in SchemaValidation
+        user = User.objects.filter(username=query[&quot;username&quot;])
+        return user
+</code></pre>
+<p>API call</p>
+<pre><code>GET /api/users?email=chris_evans HTTP/1.1
+</code></pre>
+<p>API response(422 HTTP status's code)</p>
+<pre><code class="language-json">{
+  &quot;errors&quot;: [
+    {
+      &quot;field&quot;: &quot;email&quot;,
+      &quot;detail&quot;: [
+        &quot;Enter a valid email address.&quot;
+      ]
+    }
+  ],
+  &quot;message&quot;: &quot;Validation Error!&quot;
+}
+</code></pre>
+<p>Accept list query params lookup:</p>
+<pre><code class="language-py">from drf_http_serialization import HttpSerialization, SchemaValidation
+from drf_http_serialization.serializers import UserListLookUpSerializer, UserInformationSerializer
+from drf_http_serialization.models import User
+from rest_framework.viewsets import GenericViewSet
+
+class UserViewSet(GenericViewSet):
+
+    # combination usage
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    @SchemaValidation(serializer_cls=UserListLookUpSerializer, location=&quot;query&quot;)
+    def list(self, request, query):
+        # query dict is validated
+        # the default will use key `query`, if you want to use another key,
+        # add argument to_key=&quot;something&quot; in SchemaValidation
+        user = User.objects.filter(username__in=query[&quot;username&quot;])
+        return user
+</code></pre>
+<p>API request</p>
+<pre><code>GET /api/users?username=chris_evans&amp;username=tom_hiddleston HTTP/1.1
+</code></pre>
+<p>API response</p>
+<pre><code class="language-json">{
+  &quot;count&quot;: 2, 
+  &quot;next&quot;: null, 
+  &quot;previous&quot;: null,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;email&quot;: &quot;tom_hiddleston@gmail.com&quot;,
+      &quot;username&quot;: &quot;tom_hiddleston&quot;
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;email&quot;: &quot;chris.evans@gmail.com&quot;,
+      &quot;username&quot;: &quot;chris_evans&quot;
+    }
+  ]
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../usage-api/" class="btn btn-neutral float-left" title="API Reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../contributing/" class="btn btn-neutral float-right" title="Contributing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/tkppro/drf-http-serialization" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../usage-api/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../contributing/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
