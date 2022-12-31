@@ -5,3 +5,4 @@ flake8==3.9.0
 isort==5.8.0
 wheel==0.24.0  # for PyPI installs
 mkdocs  # for documentation previews/deploys
+jinja2==3.0.3
