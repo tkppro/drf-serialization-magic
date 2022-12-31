@@ -20,7 +20,8 @@ def get_version(package):
     """
     Return package version as listed in `__version__` in `init.py`.
     """
-    init_py = open(os.path.join(package, "__init__.py")).read()
+    package_dir = os.path.join(here, package)
+    init_py = open(os.path.join(package_dir, "__init__.py")).read()
     return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(
         1
     )
@@ -35,7 +36,7 @@ def read_file(f):
 
 
 package = get_package()
-version = get_version(package)
+version = get_version(package[0])
 
 if sys.argv[-1] == "publish":
     if os.system("pip freeze | grep wheel"):
@@ -57,6 +58,7 @@ setup(
     version=version,
     packages=package,
     description=__description__,
+    long_description_content_type="text/markdown",
     long_description=read_file("README.md"),
     author=__author__,
     author_email=__author_email__,
