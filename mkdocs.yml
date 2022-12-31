@@ -1,0 +1,18 @@
+site_name: drf-http-serialization
+site_description: Serializer Decorators help you to boost-up your code and decrease the duplication in your code.
+
+repo_url: https://github.com/tkppro/drf-http-serialization
+
+site_dir: html
+theme: readthedocs
+extra_css:
+  - css/index.css
+nav:
+  - Home: 'index.md'
+  - Overview: 'overview.md'
+  - Installation: 'installation.md'
+  - User Guide:
+    - Views: 'usage-views.md'
+    - 'API Reference': 'usage-api.md'
+  - Examples: 'examples.md'
+  - Contributing: 'contributing.md'

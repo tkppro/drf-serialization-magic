@@ -1,5 +1,4 @@
-# Parameters
-Base:
+## Base Parameters
 
 **`serializer_cls`**`(serializers.BaseSerializer|str)` <br>
 The serializer to use 

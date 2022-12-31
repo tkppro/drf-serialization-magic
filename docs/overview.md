@@ -1,5 +1,5 @@
 ## Overview
-Serializer Decorators help you to boost-up your code and decrease the duplication it has.
+Serializer Decorators help you to boost-up your code and decrease the duplication in your code.
 By using a high-order functional to reduce the number of codes, and build up a consistency
 in your project
 
