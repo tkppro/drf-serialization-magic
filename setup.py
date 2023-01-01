@@ -32,7 +32,9 @@ def get_package():
 
 
 def read_file(f):
-    return open(os.path.join(here, f)).read()
+    with open(f, "r", encoding="utf-8") as fh:
+        long_description = fh.read()
+        return long_description
 
 
 package = get_package()

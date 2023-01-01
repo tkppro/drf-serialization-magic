@@ -2,12 +2,12 @@
 
 **A collection of useful Decorators to DRY up your Django Rest Framework when using Serializers**
 
-Full documentation: https://drf-http-serialization.readthedocs.io/en/latest/
+Full documentation: <https://drf-http-serialization.readthedocs.io/en/latest/>
 
 ## Overview
 
-Serializer decorators help you boost your code and decrease duplication 
-by using a higher-order function to reduce the number of lines of code 
+Serializer decorators help you boost your code and decrease duplication
+by using a higher-order function to reduce the number of lines of code
 and maintain consistency in your project.
 
 ## Requirements
@@ -135,19 +135,21 @@ class UserAPIView(APIView):
 - When validating body data(`POST` method)
 
 ```py
+from rest_framework.views import APIView
 from drf_http_serialization import HttpSerialization, SchemaValidation
 from drf_http_serialization.serializers import UserInformationSerializer
 from drf_http_serialization.models import User
 
 # combination usage
-@HttpSerialization(serializer_cls=UserInformationSerializer)
-@SchemaValidation(serializer_cls=UserInformationSerializer, location="body")
-def create(self, request, data):
-    # data object is validated
-    # the default will use key `data`, if you want to use another key,
-    # add argument to_key="something" in SchemaValidation
-    user = User.objects.create(**data)
-    return user
+class UserAPIView(APIView):
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    @SchemaValidation(serializer_cls=UserInformationSerializer, location="body")
+    def create(self, request, data):
+        # data object is validated
+        # the default will use key `data`, if you want to use another key,
+        # add argument to_key="something" in SchemaValidation
+        user = User.objects.create(**data)
+        return user
 ```
 
 API call
