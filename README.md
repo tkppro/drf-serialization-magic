@@ -1,39 +1,33 @@
-DRF HTTP Serialization
-=============
+# DRF HTTP Serialization
 
 **A collection of useful Decorators to DRY up your Django Rest Framework when using Serializers**
 
-Full documentation: 
+Full documentation: https://drf-http-serialization.readthedocs.io/en/latest/
 
 ## Overview
-Serializer Decorators help you to boost-up your code and decrease the duplication it has.
-By using a high-order functional to reduce the number of codes, and build up a consistency
-in your project
+
+Serializer decorators help you boost your code and decrease duplication 
+by using a higher-order function to reduce the number of lines of code 
+and maintain consistency in your project.
 
 ## Requirements
-* Python (>= 3.7)
-* [Django](https://github.com/django/django) (>= 3.0)
-* [Django REST Framework](https://github.com/tomchristie/django-rest-framework) (> 3.11)
+
+- Python (>= 3.7)
+- [Django](https://github.com/django/django) (>= 3.0)
+- [Django REST Framework](https://github.com/tomchristie/django-rest-framework) (> 3.11)
 
 ## Installation
+
 Using `pip`:
 
 ```bash
 $ pip install drf-http-serialization
 ```
 
-And add `drf_http_serialization` to your `INSTALLED_APPS` setting:
-
-```py
-INSTALLED_APPS = (
-    "..."
-    "drf_http_serialization"
-)
-```
-
 ## Basic Usage
 
 **HttpSerialization**
+
 ```py
 # model user
 from django.contrib.auth.models import AbstractUser
@@ -56,8 +50,8 @@ class UserInformationSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "username"]
 ```
 
+- With `@api_view` decorator function
 
-* With `@api_view` decorator function
 ```py
 from rest_framework.decorators import api_view
 from drf_http_serialization import HttpSerialization
@@ -70,6 +64,7 @@ def get_user_func_view(request):
 ```
 
 API response
+
 ```json
 {
   "data": {
@@ -80,7 +75,8 @@ API response
 }
 ```
 
-* With `GenericViewSet` class
+- With `GenericViewSet` class
+
 ```py
 from drf_http_serialization import HttpSerialization
 from rest_framework.viewsets import GenericViewSet
@@ -92,18 +88,18 @@ from drf_http_serialization.serializers import UserInformationSerializer
 class UserViewSet(GenericViewSet):
     def get_queryset(self):
         return User.objects.all()
-     
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
-    def list(self, request, pk):
-        return self.get_queryset()
 
+    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    def list(self, request):
+        return self.get_queryset()
 ```
 
 API response
+
 ```json
 {
-  "count": 2, 
-  "next": null, 
+  "count": 2,
+  "next": null,
   "previous": null,
   "data": [
     {
@@ -120,7 +116,7 @@ API response
 }
 ```
 
-* With `APIView` class
+- With `APIView` class
 
 ```py
 from rest_framework.views import APIView
@@ -136,7 +132,8 @@ class UserAPIView(APIView):
 
 **SchemaValidation**
 
-* When validating body data(`POST` method)
+- When validating body data(`POST` method)
+
 ```py
 from drf_http_serialization import HttpSerialization, SchemaValidation
 from drf_http_serialization.serializers import UserInformationSerializer
@@ -154,6 +151,7 @@ def create(self, request, data):
 ```
 
 API call
+
 ```bash
 POST /api/users HTTP/1.1
 Host: 127.0.0.1
@@ -175,17 +173,14 @@ API response (422 HTTP status's code)
   "errors": [
     {
       "field": "email",
-      "detail": [
-        "Enter a valid email address."
-      ]
+      "detail": ["Enter a valid email address."]
     }
   ],
   "message": "Validation Error!"
 }
-
 ```
 
-* When validating query params
+- When validating query params
 
 ```py
 from drf_http_serialization import HttpSerialization, SchemaValidation
@@ -207,6 +202,7 @@ class UserViewSet(GenericViewSet):
 ```
 
 API call
+
 ```
 GET /api/users?email=chris_evans HTTP/1.1
 ```
@@ -218,9 +214,7 @@ API response(422 HTTP status's code)
   "errors": [
     {
       "field": "email",
-      "detail": [
-        "Enter a valid email address."
-      ]
+      "detail": ["Enter a valid email address."]
     }
   ],
   "message": "Validation Error!"
@@ -236,7 +230,7 @@ from drf_http_serialization.models import User
 from rest_framework.viewsets import GenericViewSet
 
 class UserViewSet(GenericViewSet):
-    
+
     # combination usage
     @HttpSerialization(serializer_cls=UserInformationSerializer)
     @SchemaValidation(serializer_cls=UserListLookUpSerializer, location="query")
@@ -258,8 +252,8 @@ API response
 
 ```json
 {
-  "count": 2, 
-  "next": null, 
+  "count": 2,
+  "next": null,
   "previous": null,
   "data": [
     {
@@ -276,10 +270,9 @@ API response
 }
 ```
 
-Support
--------
+## Support
 
-If you need help, don't hesitate to start an [issue][issue]. 
+If you need help, don't hesitate to start an [issue][issue].
 For commercial support, please contact via email:
 [Thang Dang Minh](mailto:thangdangdev@gmail.com?subject=[GitHub]%20Source%20Django%20HTTP%20Serialization)
 

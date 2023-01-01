@@ -1,7 +1,7 @@
 ## Overview
-Serializer Decorators help you to boost-up your code and decrease the duplication in your code.
-By using a high-order functional to reduce the number of codes, and build up a consistency
-in your project
+Serializer decorators help you boost your code and decrease duplication 
+by using a higher-order function to reduce the number of lines of code 
+and maintain consistency in your project.
 
 ## Requirements
 * Python (>= 3.7)
