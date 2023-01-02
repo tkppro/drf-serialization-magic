@@ -2,7 +2,7 @@
 Please use [GitHub][github] to raise any bugs or feature requests.
 
 # Contributing guidelines
-To contribute to DRF HTTP Serialization, please do the following steps:
+To contribute to DRF Serialization Magic, please do the following steps:
 
 * Clone the repository
 * Ensure your changes are Flake8 compliant
@@ -15,4 +15,4 @@ To contribute to DRF HTTP Serialization, please do the following steps:
   that your work fixes
 
 
-[github]: https://github.com/tkppro/drf-http-serialization
+[github]: https://github.com/tkppro/drf-serialization-magic

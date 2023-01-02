@@ -1,8 +1,8 @@
 <div class="index">
-  <h1>Django Rest Framework HTTP Serialization</h1>
+  <h1>Django Rest Framework Serialization Magic</h1>
   <strong>
     A collection of useful Decorators to DRY up your Django Rest Framework 
-    when using Serializers
+    when working with Serializers
   </strong>
 </div>
 

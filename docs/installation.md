@@ -2,5 +2,7 @@
 Using `pip`:
 
 ```bash
-$ pip install drf-http-serialization
+$ pip install drf-serialization-magic
 ```
+
+You are good to go!
