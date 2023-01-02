@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from drf_http_serialization.models import User
+from drf_serialization_magic.models import User
 
 
 class UserInformationSerializer(serializers.ModelSerializer):

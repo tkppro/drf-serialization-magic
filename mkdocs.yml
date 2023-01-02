@@ -1,7 +1,7 @@
-site_name: drf-http-serialization
-site_description: Serializer Decorators help you to boost-up your code and decrease the duplication in your code.
+site_name: drf-serialization-magic
+site_description: Serialization magic helps you boost your code and reduce duplication in your DRF project when working with Serializers
 
-repo_url: https://github.com/tkppro/drf-http-serialization
+repo_url: https://github.com/tkppro/drf-serialization-magic
 
 site_dir: html
 theme: readthedocs

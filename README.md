@@ -1,12 +1,12 @@
-# DRF HTTP Serialization
+# DRF Serialization Magic
 
-**A collection of useful Decorators to DRY up your Django Rest Framework when using Serializers**
+**A collection of useful Decorators to DRY up your Django Rest Framework project when working with Serializers**
 
-Full documentation: <https://drf-http-serialization.readthedocs.io/en/latest/>
+Full documentation on [read the docs](https://drf-serialization-magic.readthedocs.io/en/latest/)
 
 ## Overview
 
-Serializer decorators help you boost your code and decrease duplication
+Serialization magic helps you boost your code and reduce duplication
 by using a higher-order function to reduce the number of lines of code
 and maintain consistency in your project.
 
@@ -21,12 +21,12 @@ and maintain consistency in your project.
 Using `pip`:
 
 ```bash
-$ pip install drf-http-serialization
+$ pip install drf-serialization-magic
 ```
 
 ## Basic Usage
 
-**HttpSerialization**
+**RenderSerialization**
 
 ```py
 # model user
@@ -39,7 +39,7 @@ class User(AbstractUser):
 ```py
 # serializers.py
 from rest_framework import serializers
-from drf_http_serialization.models import User
+from drf_serialization_magic.models import User
 
 class UserInformationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
@@ -54,11 +54,11 @@ class UserInformationSerializer(serializers.ModelSerializer):
 
 ```py
 from rest_framework.decorators import api_view
-from drf_http_serialization import HttpSerialization
-from drf_http_serialization.serializers import UserInformationSerializer
+from drf_serialization_magic import RenderSerialization
+from drf_serialization_magic.serializers import UserInformationSerializer
 
 @api_view(http_method_names=["GET"])
-@HttpSerialization(serializer_cls=UserInformationSerializer)
+@RenderSerialization(serializer_cls=UserInformationSerializer)
 def get_user_func_view(request):
     return request.user
 ```
@@ -78,10 +78,10 @@ API response
 - With `GenericViewSet` class
 
 ```py
-from drf_http_serialization import HttpSerialization
+from drf_serialization_magic import RenderSerialization
 from rest_framework.viewsets import GenericViewSet
-from drf_http_serialization.models import User
-from drf_http_serialization.serializers import UserInformationSerializer
+from drf_serialization_magic.models import User
+from drf_serialization_magic.serializers import UserInformationSerializer
 # ...
 
 
@@ -89,7 +89,7 @@ class UserViewSet(GenericViewSet):
     def get_queryset(self):
         return User.objects.all()
 
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    @RenderSerialization(serializer_cls=UserInformationSerializer)
     def list(self, request):
         return self.get_queryset()
 ```
@@ -120,34 +120,35 @@ API response
 
 ```py
 from rest_framework.views import APIView
-from drf_http_serialization import HttpSerialization
-from drf_http_serialization.serializers import UserInformationSerializer
+from drf_serialization_magic import RenderSerialization
+from drf_serialization_magic.serializers import UserInformationSerializer
 
 
 class UserAPIView(APIView):
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
+    @RenderSerialization(serializer_cls=UserInformationSerializer)
     def get(self, request):
         return request.user
 ```
 
-**SchemaValidation**
+**ValidateSerialization**
 
 - When validating body data(`POST` method)
 
 ```py
 from rest_framework.views import APIView
-from drf_http_serialization import HttpSerialization, SchemaValidation
-from drf_http_serialization.serializers import UserInformationSerializer
-from drf_http_serialization.models import User
+from drf_serialization_magic import RenderSerialization, ValidateSerialization
+from drf_serialization_magic.serializers import UserInformationSerializer
+from drf_serialization_magic.models import User
+
 
 # combination usage
 class UserAPIView(APIView):
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
-    @SchemaValidation(serializer_cls=UserInformationSerializer, location="body")
+    @RenderSerialization(serializer_cls=UserInformationSerializer)
+    @ValidateSerialization(serializer_cls=UserInformationSerializer, location="body")
     def create(self, request, data):
         # data object is validated
         # the default will use key `data`, if you want to use another key,
-        # add argument to_key="something" in SchemaValidation
+        # pass argument to_key="something" in ValidateSerialization
         user = User.objects.create(**data)
         return user
 ```
@@ -185,20 +186,21 @@ API response (422 HTTP status's code)
 - When validating query params
 
 ```py
-from drf_http_serialization import HttpSerialization, SchemaValidation
-from drf_http_serialization.serializers import UserInformationSerializer
-from drf_http_serialization.models import User
+from drf_serialization_magic import RenderSerialization, ValidateSerialization
+from drf_serialization_magic.serializers import UserInformationSerializer
+from drf_serialization_magic.models import User
 from rest_framework.viewsets import GenericViewSet
+
 
 class UserViewSet(GenericViewSet):
 
     # combination usage
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
-    @SchemaValidation(serializer_cls=UserInformationSerializer, location="query")
+    @RenderSerialization(serializer_cls=UserInformationSerializer)
+    @ValidateSerialization(serializer_cls=UserInformationSerializer, location="query")
     def list(self, request, query):
         # data dict is validated
         # the default will use key `data`, if you want to use another key,
-        # add argument to_key="something" in SchemaValidation
+        # pass argument to_key="something" in ValidateSerialization
         user = User.objects.filter(username=query["username"])
         return user
 ```
@@ -226,20 +228,22 @@ API response(422 HTTP status's code)
 Accept list query params lookup:
 
 ```py
-from drf_http_serialization import HttpSerialization, SchemaValidation
-from drf_http_serialization.serializers import UserListLookUpSerializer, UserInformationSerializer
-from drf_http_serialization.models import User
+from drf_serialization_magic import RenderSerialization, ValidateSerialization
+from drf_serialization_magic.serializers import UserListLookUpSerializer, UserInformationSerializer
+    
+from drf_serialization_magic.models import User
 from rest_framework.viewsets import GenericViewSet
+
 
 class UserViewSet(GenericViewSet):
 
     # combination usage
-    @HttpSerialization(serializer_cls=UserInformationSerializer)
-    @SchemaValidation(serializer_cls=UserListLookUpSerializer, location="query")
+    @RenderSerialization(serializer_cls=UserInformationSerializer)
+    @ValidateSerialization(serializer_cls=UserListLookUpSerializer, location="query")
     def list(self, request, query):
         # query dict is validated
         # the default will use key `query`, if you want to use another key,
-        # add argument to_key="something" in SchemaValidation
+        # pass argument to_key="something" in ValidateSerialization
         user = User.objects.filter(username__in=query["username"])
         return user
 ```
@@ -272,10 +276,19 @@ API response
 }
 ```
 
+## Testing
+
+Tested with:
+
+- Python (>= 3.9)
+- [Django](https://github.com/django/django) (>= 3.1)
+- [Django REST Framework](https://github.com/tomchristie/django-rest-framework) (> 3.11)
+
+
 ## Support
 
 If you need help, don't hesitate to start an [issue][issue].
 For commercial support, please contact via email:
-[Thang Dang Minh](mailto:thangdangdev@gmail.com?subject=[GitHub]%20Source%20Django%20HTTP%20Serialization)
+[Thang Dang Minh](mailto:thangdangdev@gmail.com?subject=[GitHub]%20Source%20Django%20Serialization%20Magic)
 
-[issue]: https://github.com/tkppro/drf-http-serialization/issues
+[issue]: https://github.com/tkppro/drf-serialization-magic/issues

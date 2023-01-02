@@ -1,6 +1,6 @@
 ## Overview
-Serializer decorators help you boost your code and decrease duplication 
-by using a higher-order function to reduce the number of lines of code 
+Serialization magic helps you boost your code and reduce duplication
+by using a higher-order function to reduce the number of lines of code
 and maintain consistency in your project.
 
 ## Requirements

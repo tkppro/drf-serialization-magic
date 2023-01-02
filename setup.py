@@ -6,11 +6,11 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-__name__ = "drf-http-serialization"
+__name__ = "drf-serialization-magic"
 __description__ = (
-    "Open package for Django to validate and serialize response data in short way"
+    "Open package for Django Rest Framework to reduce the duplication of code when working with Serializer"
 )
-__url__ = "https://github.com/tkppro/drf-http-serialization"
+__url__ = "https://github.com/tkppro/drf-serialization-magic"
 __author__ = "Thang Dang Minh"
 __author_email__ = "thangdangdev@gmail.com"
 __license__ = "BSD"
@@ -47,7 +47,8 @@ if sys.argv[-1] == "publish":
     if os.system("pip freeze | grep twine"):
         print("twine not installed.\nUse `pip install twine`.\nExiting.")
         sys.exit()
-    os.system("python setup.py sdist bdist_wheel")
+    os.system("python -m build")
+    os.system("twine check dist/*")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
     print("  git tag -a %s -m 'version %s'" % (version, version))

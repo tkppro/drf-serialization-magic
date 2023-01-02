@@ -127,7 +127,7 @@ class BaseSerializationHandler:
                 return Response({"data": serializer.data})
 
 
-class HttpSerialization(BaseSerializationHandler):
+class RenderSerialization(BaseSerializationHandler):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -153,7 +153,7 @@ class HttpSerialization(BaseSerializationHandler):
         return wrapper
 
 
-class SchemaValidation(BaseSerializationHandler):
+class ValidateSerialization(BaseSerializationHandler):
     SINGLE_FIELD_TYPE = (CharField, DateField, BooleanField, DateTimeField)
     default_dict_key = {"header": "query", "body": "data"}
 

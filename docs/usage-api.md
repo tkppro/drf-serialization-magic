@@ -1,7 +1,9 @@
 ## Base Parameters
 
+### Reference
+
 **`serializer_cls`**`(serializers.BaseSerializer|str)` <br>
-The serializer to use 
+The serializer class to use 
 
 **`paginator`**`(Optional)` <br>
 Default will use pagination in settings file
@@ -10,7 +12,7 @@ Default will use pagination in settings file
 **`error_messages`**`(Optional[str])` <br>
 Error message
 
-## SchemaValidation
+## ValidateSerialization
 
 ### Reference
 
