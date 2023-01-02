@@ -11,4 +11,5 @@ coverage.xml
 *.egg-info
 venv
 .idea
+
 .DS_Store
