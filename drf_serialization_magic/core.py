@@ -1,3 +1,5 @@
+import functools
+
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 from rest_framework.fields import CharField, DateField, BooleanField, DateTimeField
@@ -136,6 +138,7 @@ class RenderSerialization(BaseSerializationHandler):
         Decorator function to serialize data before response
         """
 
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             # Get the request object
             request = self._extract_request(*args, **kwargs)
@@ -216,6 +219,7 @@ class ValidateSerialization(BaseSerializationHandler):
         return converted_params
 
     def __call__(self, func):
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             request = self._extract_request(*args, **kwargs)
             try:
