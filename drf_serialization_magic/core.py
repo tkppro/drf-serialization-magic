@@ -2,7 +2,7 @@ import functools
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
-from rest_framework.fields import CharField, DateField, BooleanField, DateTimeField
+from rest_framework.fields import ListField
 from typing import Any, Union
 
 from django.db.models import QuerySet
@@ -157,7 +157,7 @@ class RenderSerialization(BaseSerializationHandler):
 
 
 class ValidateSerialization(BaseSerializationHandler):
-    SINGLE_FIELD_TYPE = (CharField, DateField, BooleanField, DateTimeField)
+    LIST_FIELD = ListField
     default_dict_key = {"header": "query", "body": "data"}
 
     def __init__(self, location=None, to_key=None, **kwargs):
@@ -200,14 +200,14 @@ class ValidateSerialization(BaseSerializationHandler):
                 _serializer = self._serializer_cls()
                 field = _serializer.get_fields().get(field_key)
 
-                # Check if the field is a CharField, DateField, or BooleanField
-                if type(field) in self.SINGLE_FIELD_TYPE:
+                # Check if the field is not ListField
+                if type(field) != self.LIST_FIELD:
                     # Only one item in list, if more than one, it will raise ValidationError
                     if len(field_value) == 1:
                         # Parse to string
                         return self._parse_type(field_value[0])
 
-                # No serializer or field is not a CharField, DateField, or BooleanField
+                # Field is ListField
                 # Convert all values in the list to numeric or string types
             return [self._parse_type(el) for el in field_value]
 
