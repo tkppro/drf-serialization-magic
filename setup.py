@@ -8,7 +8,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 __name__ = "drf-serialization-magic"
 __description__ = (
-    "Open package for Django Rest Framework to reduce the duplication of code when working with Serializer"
+    "Open library for Django Rest Framework to reduce the duplication of code when working with Serializer"
 )
 __url__ = "https://github.com/tkppro/drf-serialization-magic"
 __author__ = "Thang Dang Minh"
